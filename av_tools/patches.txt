@@ -28,3 +28,5 @@ av_tools.patches.v1_0.move_salary_register_reports
 av_tools.patches.v1_0.move_financial_and_trade_reports
 av_tools.patches.v1_0.move_hr_access_and_loan_reports
 av_tools.patches.v1_0.move_finance_and_education_doctypes
+av_tools.patches.v1_0.move_trade_in_feature
+av_tools.patches.remove_weighbridge_ticket_fields

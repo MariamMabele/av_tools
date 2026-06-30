@@ -6,7 +6,7 @@ frappe.ui.form.on('Special Closing Balance', {
 
 		frm.set_query("item_code", "closing_balance_details", function(doc, cdt, cdn) {
 			return {
-				query: "erpnext.controllers.queries.item_query",
+				query: "av_tools.av_tools_hooks.item_search.item_query",
 				filters:{
 					"is_stock_item": 1
 				}

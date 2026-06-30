@@ -9,6 +9,7 @@
  "field_order": [
   "item_code",
   "item_name",
+  "description",
   "column_break_xlxw",
   "qty_in_kg",
   "qty",
@@ -32,6 +33,12 @@
    "read_only": 1
   },
   {
+   "fieldname": "description",
+   "fieldtype": "Text Editor",
+   "in_list_view": 1,
+   "label": "Description"
+  },
+  {
    "fieldname": "qty",
    "fieldtype": "Float",
    "in_list_view": 1,
@@ -50,7 +57,8 @@
    "fetch_from": "item_code.stock_uom",
    "in_list_view": 1,
    "label": "UOM",
-   "options": "UOM"
+   "options": "UOM",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_xlxw",

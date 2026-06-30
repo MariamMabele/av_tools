@@ -25,10 +25,14 @@
   "column_break_dates",
   "reminder_days_before",
   "notify_role",
-  "notes_section",
-  "license_attachment",
+  "references_section",
+  "reference_doctype",
   "naming_series",
   "amended_from",
+  "column_break_yqyw",
+  "reference_docname",
+  "license_attachment",
+  "notes_section",
   "column_break_mnbd",
   "notes"
  ],
@@ -143,6 +147,23 @@
    "label": "Fee Paid"
   },
   {
+   "fieldname": "references_section",
+   "fieldtype": "Section Break",
+   "label": "References"
+  },
+  {
+   "fieldname": "reference_doctype",
+   "fieldtype": "Link",
+   "label": "Reference DocType",
+   "options": "DocType"
+  },
+  {
+   "fieldname": "reference_docname",
+   "fieldtype": "Dynamic Link",
+   "label": "Reference Docname",
+   "options": "reference_doctype"
+  },
+  {
    "collapsible": 1,
    "fieldname": "notes_section",
    "fieldtype": "Section Break"
@@ -194,6 +215,10 @@
   {
    "fieldname": "column_break_mnbd",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_yqyw",
+   "fieldtype": "Column Break"
   }
  ],
  "links": [
@@ -202,7 +227,7 @@
    "link_fieldname": "license_register"
   }
  ],
- "modified": "2026-05-06 14:19:05.322331",
+ "modified": "2026-06-05 16:26:15.629480",
  "modified_by": "Administrator",
  "module": "Compliance",
  "name": "License Register",

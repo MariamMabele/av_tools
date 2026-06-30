@@ -1,0 +1,25 @@
+[
+    {
+        "name": "Sales Invoice Item-is_ignored_in_pending_qty",
+        "module": "Av Tools",
+        "doctype": "Custom Field",
+        "dt": "Sales Invoice Item",
+        "fieldname": "is_ignored_in_pending_qty",
+        "fieldtype": "Check",
+        "label": "Is Ignored In Pending Qty",
+        "insert_after": "item_code",
+        "allow_on_submit": 1,
+        "permlevel": 2
+    },
+    {
+        "name": "Sales Invoice Item-allow_over_sell",
+        "module": "Av Tools",
+        "doctype": "Custom Field",
+        "dt": "Sales Invoice Item",
+        "fieldname": "allow_over_sell",
+        "fieldtype": "Check",
+        "label": "Allow Over Sell",
+        "insert_after": "customer_item_code",
+        "default": "0"
+    }
+]

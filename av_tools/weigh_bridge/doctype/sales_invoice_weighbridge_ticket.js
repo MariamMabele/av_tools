@@ -28,31 +28,29 @@ const set_fields_if_present = (frm, values) => {
   });
 };
 
-const get_ticket_route_options = (frm) => {
-  const options = {
-    document_type: frm.doctype,
-    document_reference: frm.doc.name || undefined,
-    company: frm.doc.company || undefined,
-  };
-
-  if (PARTY_FIELD === "customer") {
-    options.customer = frm.doc.customer || undefined;
-  } else {
-    options.supplier = frm.doc.supplier || undefined;
-  }
-
-  return options;
-};
-
 const add_create_ticket_button = (frm) => {
-  if (frm.doc.docstatus !== 1 || frm.doc.weighbridge_ticket) {
+  if (frm.doc.docstatus !== 1) {
     return;
   }
 
   frm.add_custom_button(
     __("Weighbridge Ticket"),
     () => {
-      frappe.new_doc("Weighbridge Ticket", get_ticket_route_options(frm));
+      frappe.call({
+        method: "av_tools.weigh_bridge.api.create_weighbridge_ticket",
+        args: {
+          source_name: frm.doc.name,
+          source_doctype: frm.doctype
+        },
+        freeze: true,
+        freeze_message: __("Creating Weighbridge Ticket..."),
+        callback: (r) => {
+          if (r.message) {
+            const url = frappe.urllib.get_full_url(`/app/weighbridge-ticket/${r.message}`);
+            window.open(url, '_blank');
+          }
+        }
+      });
     },
     __("Create")
   );

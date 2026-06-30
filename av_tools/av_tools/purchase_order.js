@@ -1,3 +1,27 @@
+frappe.require([
+	"/assets/av_tools/js/po_shortcuts.js",
+]);
+
+frappe.ui.keys.add_shortcut({
+	shortcut: "ctrl+i",
+	action: () => {
+		ctrlI("Purchase Order Item");
+	},
+	page: this.page,
+	description: __("Select Customer Item Price"),
+	ignore_inputs: true,
+});
+
+frappe.ui.keys.add_shortcut({
+	shortcut: "ctrl+u",
+	action: () => {
+		ctrlU("Purchase Order Item");
+	},
+	page: this.page,
+	description: __("Select Item Price"),
+	ignore_inputs: true,
+});
+
 frappe.ui.form.on("Purchase Order Item", {
 	item_code: async function (frm, cdt, cdn) {
 		await set_dynamic_price_list_rate(frm, cdt, cdn);

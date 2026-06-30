@@ -52,9 +52,17 @@ doctype_js = {
 	"Sales Invoice": [
 		"weigh_bridge/doctype/sales_invoice_weighbridge_ticket.js",
 		"authotp/api/sales_invoice.js",
+		"av_tools/sales_invoice.js",
+		"av_tools/item_remaining_qty.js",
 	],
-	"Delivery Note": "weigh_bridge/doctype/delivery_note_weighbridge_ticket.js",
-	"Sales Order": "weigh_bridge/doctype/sales_order_weighbridge_ticket.js",
+	"Delivery Note": [
+		"weigh_bridge/doctype/delivery_note_weighbridge_ticket.js",
+		"av_tools/delivery_note.js",
+	],
+	"Sales Order": [
+		"weigh_bridge/doctype/sales_order_weighbridge_ticket.js",
+		"av_tools/sales_order.js",
+	],
 	"Purchase Order": [
 		"weigh_bridge/doctype/purchase_order_weighbridge_ticket.js",
 		"av_tools/purchase_order.js",
@@ -62,6 +70,7 @@ doctype_js = {
 	"Stock Entry": "av_tools/stock_entry.js",
 	"Purchase Invoice": "weigh_bridge/doctype/purchase_invoice_weighbridge_ticket.js",
 	"Purchase Receipt": "weigh_bridge/doctype/purchase_receipt_weighbridge_ticket.js",
+	"Material Request": "av_tools/material_request.js",
 	"Customer": "authotp/api/customer.js",
 	"Account": "av_tools/account.js",
 }
@@ -104,6 +113,7 @@ doctype_js = {
 # ------------
 
 # before_install = "av_tools.install.before_install"
+before_install = "av_tools.install.before_install"
 after_install = [
 	"av_tools.weigh_bridge.custom_fields.setup_custom_fields",
 	"av_tools.patches.custom_fields.auth_otp_custom_fields.execute",
@@ -179,8 +189,14 @@ after_migrate = [
 # }
 doc_events = {
 	"Sales Invoice": {
-		"validate": "av_tools.weigh_bridge.validation.validate_weighbridge_ticket",
+		"validate": [
+			"av_tools.weigh_bridge.validation.validate_weighbridge_ticket",
+			"av_tools.av_tools_hooks.trade_in.validate_trade_in_serial_no_and_batch",
+			"av_tools.av_tools_hooks.trade_in.validate_trade_in_sales_percentage",
+			"av_tools.av_tools_hooks.item_remaining_qty.validate_items_remaining_qty",
+		],
 		"before_submit": "av_tools.authotp.api.sales_invoice.before_submit",
+		"on_submit": "av_tools.av_tools_hooks.trade_in.create_trade_in_stock_entry",
 	},
 	"Delivery Note": {"validate": "av_tools.weigh_bridge.validation.validate_weighbridge_ticket"},
 	"Sales Order": {"validate": "av_tools.weigh_bridge.validation.validate_weighbridge_ticket"},
@@ -206,9 +222,7 @@ doc_events = {
 		"after_insert": ["av_tools.av_tools.doctype.visibility.visibility.run_visibility"],
 		"before_naming": ["av_tools.av_tools.doctype.visibility.visibility.run_visibility"],
 		"before_change": ["av_tools.av_tools.doctype.visibility.visibility.run_visibility"],
-		"before_update_after_submit": [
-			"av_tools.av_tools.doctype.visibility.visibility.run_visibility"
-		],
+		"before_update_after_submit": ["av_tools.av_tools.doctype.visibility.visibility.run_visibility"],
 		"before_validate": ["av_tools.av_tools.doctype.visibility.visibility.run_visibility"],
 		"before_save": ["av_tools.av_tools.doctype.visibility.visibility.run_visibility"],
 		"on_update": ["av_tools.av_tools.doctype.visibility.visibility.run_visibility"],
@@ -217,9 +231,7 @@ doc_events = {
 		"on_cancel": ["av_tools.av_tools.doctype.visibility.visibility.run_visibility"],
 		"on_trash": ["av_tools.av_tools.doctype.visibility.visibility.run_visibility"],
 		"on_submit": ["av_tools.av_tools.doctype.visibility.visibility.run_visibility"],
-		"on_update_after_submit": [
-			"av_tools.av_tools.doctype.visibility.visibility.run_visibility"
-		],
+		"on_update_after_submit": ["av_tools.av_tools.doctype.visibility.visibility.run_visibility"],
 		"on_change": ["av_tools.av_tools.doctype.visibility.visibility.run_visibility"],
 	},
 }
@@ -236,7 +248,7 @@ scheduler_events = {
 	"daily": [
 		"av_tools.av_tools.doctype.visibility.visibility.trigger_daily_alerts",
 		"av_tools.compliance.doctype.license_register.license_register.update_license_statuses",
-	]
+	],
 }
 
 # Testing
@@ -248,6 +260,8 @@ scheduler_events = {
 # ------------------------------
 #
 override_whitelisted_methods = {
+	"frappe.desk.search.search_link": "av_tools.av_tools_hooks.item_search.search_link",
+	"frappe.desk.search.search_widget": "av_tools.av_tools_hooks.item_search.search_widget",
 	"frappe.desk.query_report.get_script": "av_tools.av_tools_hooks.query_report.get_script",
 	"erpnext.buying.doctype.purchase_order.purchase_order.update_status": "av_tools.av_tools_hooks.generic_erp_behavior_overrides.update_purchase_order_status",
 	"erpnext.buying.doctype.purchase_order.purchase_order.close_or_unclose_purchase_orders": "av_tools.av_tools_hooks.generic_erp_behavior_overrides.close_or_unclose_purchase_orders",
@@ -256,9 +270,7 @@ override_whitelisted_methods = {
 }
 
 # Override doctype class to intercept report execution
-override_doctype_class = {
-	"Report": "av_tools.av_tools_hooks.report_override.ReportOverride"
-}
+override_doctype_class = {"Report": "av_tools.av_tools_hooks.report_override.ReportOverride"}
 #
 # each overriding function accepts a `data` argument;
 # generated from the base implementation of the doctype dashboard,

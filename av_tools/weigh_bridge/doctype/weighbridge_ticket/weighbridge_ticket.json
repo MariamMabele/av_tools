@@ -10,6 +10,7 @@
   "customer",
   "supplier",
   "vehicle",
+  "destination",
   "column_break_reference",
   "document_type",
   "document_reference",
@@ -121,6 +122,11 @@
    "options": "Vehicle"
   },
   {
+   "fieldname": "destination",
+   "fieldtype": "Data",
+   "label": "Destination"
+  },
+  {
    "fieldname": "section_break_weights",
    "fieldtype": "Section Break",
    "label": "Weights"
@@ -196,7 +202,7 @@
    "depends_on": "eval: doc.docstatus != 1",
    "fieldname": "use_vehicle_tare",
    "fieldtype": "Button",
-   "label": "Use Vehicle Tare"
+   "label": "Auto Tare"
   },
   {
    "depends_on": "eval: doc.docstatus != 1",

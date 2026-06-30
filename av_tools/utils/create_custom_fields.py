@@ -40,6 +40,15 @@ def create_fields_from_json(custom_fields_obj):
             field_name: custom_field.get(field_name) for field_name in field_list
         }
 
+        # Ensure module exists to avoid LinkValidationError
+        module_name = custom_field_dict.get("module")
+        if module_name and not frappe.db.exists("Module Def", module_name):
+            frappe.get_doc({
+                "doctype": "Module Def",
+                "module_name": module_name,
+                "app_name": "av_tools"
+            }).insert(ignore_permissions=True)
+
         doctype_custom_fields_dict.setdefault(doctype, []).append(custom_field_dict)
 
     create_custom_fields(doctype_custom_fields_dict, update=True)
